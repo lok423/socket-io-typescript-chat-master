@@ -1,0 +1,102 @@
+
+      <div *ngIf="!selectedUser;then contact; else messager">
+      </div>
+
+      <ng-template #contact>
+      <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <mat-card>
+              <mat-list>
+                <div *ngFor="let user of allUsersList">
+                  <!--
+                  <mat-list-item class="contact" *ngIf="!user.channelid.includes(socketId)" (click)="selectUser(user)" >
+                  -->
+                  <mat-list-item class="contact" *ngIf="!user.channelid.includes(socketId)" (click)="selectUser(user)" >
+                    <img mat-list-avatar src="https://api.adorable.io/avatars/285/{{user.userName}}.png" alt="Desc 1">
+                    <h3 mat-line>{{user.userName}}</h3>
+
+                  <div *ngIf="user.online==true">
+                    <p mat-line>(Online)</p>
+                  </div>
+                  </mat-list-item>
+                </div>
+
+              </mat-list>
+            </mat-card>
+
+                  <!--{{userList|json}}-->
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #messager>
+      <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <mat-card>
+                    <mat-list style="width:100%">
+                    <mat-list-item >
+                      <img mat-list-avatar src="https://api.adorable.io/avatars/285/{{selectedUser.id}}.png" alt="Desc 1">
+                      <h3 mat-line>{{selectedUser.userName}}</h3>
+                        <a href="#"(click)="selectedUser=null">back</a>
+                    </mat-list-item>
+    </mat-list>
+  <mat-card-content class="messageContent">
+    <div class="message-container">
+        <ul class="list-group">
+          <div *ngFor="let message of messages">
+
+            <!-- If the message is from the selected user Or the message is sent by yourself; then display  -->
+            <li class="list-group-item" *ngIf="selectedUser.userName== message.senderName || (message.senderName==username && selectedUser.userName==message.receiverName)"
+                >
+                <!-- If the message is from yourself; then display on right -->
+                <div *ngIf="message.senderName==username" class="text-right">
+                  <mat-list style="width:100%">
+                  <mat-list-item >
+                    <h3 mat-line style="margin-right:20px;">{{message.senderName}}</h3>
+                    <p mat-line style="margin-right:20px;" >{{ message.msg }} :says</p>
+                    <img mat-list-avatar src="https://api.adorable.io/avatars/285/{{message.fromid}}.png" alt="Desc 1" style="position:absolute;right:0;">
+                  </mat-list-item>
+  </mat-list>
+                </div>
+
+                <!-- If the message is from others; then display on left -->
+                <div class="" *ngIf="selectedUser.userName==message.senderName">
+                  <mat-list style="width:100%">
+                  <mat-list-item >
+                    <img mat-list-avatar src="https://api.adorable.io/avatars/285/{{message.fromid}}.png" alt="Desc 1">
+                    <h3 mat-line>{{message.senderName}}</h3>
+                      <p mat-line>says: {{ message.msg }}</p>
+                  </mat-list-item>
+  </mat-list>
+                </div>
+              <!--  {{ message.sendername }} says: {{ message.msg }}-->
+            </li>
+          </div>
+        </ul>
+        <div class="alert alert-warning" *ngIf='messages.length == 0'>
+            No messages for you.
+        </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="">
+      <mat-icon>message</mat-icon>
+      <mat-form-field class="chat-input">
+        <input matInput
+               #inputMessage
+               maxlength="140"
+               placeholder="Type your message"
+               [(ngModel)]="messageContent"
+               (keyup.enter)="sendMessage(messageContent)">
+        <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
+      </mat-form-field>
+    </div>
+  </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+</ng-template>
