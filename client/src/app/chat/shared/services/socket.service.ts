@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
-import { Message } from '../model/message';
+import { Message,DrawImg } from '../model/message';
 import { Event } from '../model/event';
 
 import * as socketIo from 'socket.io-client';
@@ -51,6 +51,15 @@ export class SocketService {
     public onEvent(event: Event): Observable<any> {
         return new Observable<Event>(observer => {
             this.socket.on(event, () => observer.next());
+        });
+    }
+    public sendDrawImg(img: DrawImg): void {
+        this.socket.emit('getDraw', img);
+    }
+
+    public onDrawImg(): Observable<DrawImg> {
+        return new Observable<DrawImg>(observer => {
+            this.socket.on('sendDrawImg', (data: DrawImg) => observer.next(data));
         });
     }
 }

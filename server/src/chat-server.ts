@@ -185,18 +185,54 @@ console.log("found same user, which id",sameUserIds);
 		    });
 
 
-/*
+        socket.on('getDraw', (data:any) => {
+          var newMsg = new chatSchema(data);
+          //chatSchema.save({fromname:"aa", toname:"bb", msg:"hi"});
+          newMsg.save(function(err){
+          if(err) throw err;
+        })
 
-            socket.on('message', (m: Message) => {
-                console.log('[server](message): %s', JSON.stringify(m));
-                this.io.emit('message', m);
+          console.log("saved message:",data);
+          if(data.toid!=''){
+          for(let i=0; i<data.toid.length;i++){
+            socket.broadcast.to(data.toid[i]).emit('sendDrawImg',{
+              //msg:data.msg,
+              senderName:data.senderName,
+              drawImg:data.drawImg,
+              receiverName: data.receiverName,
+              fromid:data.fromid,
+              toid:data.toid,
+              createAt:data.createAt
             });
-
-            socket.on('disconnect', () => {
-                console.log('Client disconnected');
+          }
+        }
+        if(data.selfsockets!=''){
+          for(let i=0; i<data.selfsockets.length;i++){
+            socket.broadcast.to(data.selfsockets[i]).emit('sendDrawImg',{
+              //msg:data.msg,
+              senderName:data.senderName,
+              drawImg:data.drawImg,
+              receiverName: data.receiverName,
+              fromid:data.fromid,
+              toid:data.toid,
+              createAt:data.createAt
             });
+          }
+        }
 
-*/
+
+
+          socket.emit('sendDrawImg',{
+            //msg:data.msg,
+            senderName:data.senderName,
+            drawImg:data.drawImg,
+            receiverName: data.receiverName,
+            fromid:data.fromid,
+            toid:data.toid,
+            createAt:data.createAt
+          });
+
+        });
         });
 
     }

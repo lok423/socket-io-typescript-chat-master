@@ -14,9 +14,14 @@ let schema = new Schema({
   },
   msg: {
 	   type: String,
-	   required: true
+	   required: false
   },
-  
+
+  drawImg:{
+    type: String,
+    required: false
+  },
+
   createdAt: {
 	   type: Date,
 	   required: false

@@ -40,10 +40,12 @@ import {
   MatTooltipModule,
 } from '@angular/material';
 import { MessagerComponent } from './messager/messager.component';
+//import { DrawboardComponent } from './drawboard/drawboard.component';
 @NgModule({
   declarations: [
     AppComponent,
-    MessagerComponent
+    MessagerComponent,
+    //DrawboardComponent
   ],
   imports: [
     BrowserModule,
@@ -86,6 +88,6 @@ import { MessagerComponent } from './messager/messager.component';
     MatTooltipModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

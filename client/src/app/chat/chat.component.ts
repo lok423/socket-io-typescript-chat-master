@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef, MatList, MatListItem } from '@angular/material
 
 import { Action } from './shared/model/action';
 import { Event } from './shared/model/event';
-import { Message } from './shared/model/message';
+import { Message, DrawImg } from './shared/model/message';
 import { User } from './shared/model/user';
 import { SocketService } from './shared/services/socket.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
@@ -46,6 +46,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 	userList = [];
   username:string;
   selfsockets=[];
+  drawImg=null;
   allUsersList = [{channelid: '', userName: "mark",online:false},
 
 {channelid: '',userName: "dean",online:false},
@@ -154,6 +155,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
 	});
 
+  this.ioConnection = this.socketService.onDrawImg()
+    .subscribe((img: DrawImg) => {
+      this.messages.push(img);
+      console.log("receive draw:",img);
+    });
+
 
 
 
@@ -234,6 +241,29 @@ export class ChatComponent implements OnInit, AfterViewInit {
   return true;
 }
 
+handleDrawOutput(output){
+  this.drawImg=output;
+  console.log("output",this.drawImg);
+  this.sendDrawImg(this.drawImg);
+}
+
+public sendDrawImg(img: string): void {
+  if (!img) {
+    return;
+  }
+
+  this.socketService.sendDrawImg({
+        fromid: this.socketId,
+          toid : this.selectedUser.channelid,
+        //msg : message,
+        drawImg:img,
+        senderName : this.username,
+        receiverName : this.selectedUser.userName,
+        //createAt: Date.now(),
+        selfsockets: this.selfsockets
+  });
+
+}
 
 
   /*
